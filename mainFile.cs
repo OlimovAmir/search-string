@@ -7,34 +7,65 @@ using System.IO;
 
 namespace search_string
 {
-    public class mainFile
+    public class MainFile
     {
         static void Main()
         {
-            string fileName = "example.txt";
-            string content = "Это текст, который будет записан в файл.";
+            string fileName = "list.txt";
+            Console.WriteLine("Выберите режим (1 - Добавить в файл, 2 - Просмотр файла):");
+            int choice = int.Parse(Console.ReadLine());
 
-            // Создание и запись в файл с использованием using
-            using (StreamWriter writer = new StreamWriter(fileName))
+            if (!File.Exists(fileName))
             {
-                writer.Write(content);
-                Console.WriteLine($"Файл {fileName} успешно создан и заполнен.");
+                // Файл не существует, создаем его
+                using (StreamWriter writer = File.CreateText(fileName))
+                {
+                    writer.WriteLine("Пример текста в файле.");
+                    writer.WriteLine("Другая строка.");
+                }
+
+                Console.WriteLine($"Файл {fileName} успешно создан.");
+            }
+            else
+            {
+                Console.WriteLine($"Файл {fileName} уже существует.");
             }
 
-            // Чтение файла:
-            if (File.Exists(fileName))
+            if (choice == 1)
             {
-                // Чтение содержимого файла
-                using (StreamReader reader = new StreamReader(fileName))
+                // Режим добавления данных в файл
+                Console.WriteLine("Введите данные для добавления в файл:");
+                string dataToAdd = Console.ReadLine();
+
+                // Запись данных в файл
+                using (StreamWriter writer = new StreamWriter(fileName, true)) // Второй аргумент "true" означает добавление данных к существующему содержимому файла
                 {
-                    string content2 = reader.ReadToEnd();
-                    Console.WriteLine($"Содержимое файла {fileName}:");
-                    Console.WriteLine(content2);
+                    writer.WriteLine(dataToAdd);
+                }
+
+                Console.WriteLine("Данные успешно добавлены в файл.");
+            }
+            else if (choice == 2)
+            {
+                // Режим просмотра содержимого файла
+                if (File.Exists(fileName))
+                {
+                    // Чтение содержимого файла
+                    using (StreamReader reader = new StreamReader(fileName))
+                    {
+                        string content = reader.ReadToEnd();
+                        Console.WriteLine($"Содержимое файла {fileName}:");
+                        Console.WriteLine(content);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Файл {fileName} не существует.");
                 }
             }
             else
             {
-                Console.WriteLine($"Файл {fileName} не существует.");
+                Console.WriteLine("Неверный выбор режима.");
             }
 
             // Добавление функции поиска строки в файле
