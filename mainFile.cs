@@ -14,8 +14,8 @@ namespace search_string
             string fileName = "list.txt";
             Console.WriteLine("Выберите режим (" +
                 "1 - Добавить в файл, " +
-                "2 - Просмотр файла):" +
-                "3 - Поиск строки");
+                "2 - Просмотр файла, " +
+                "3 - Поиск строки):");
             int choice = int.Parse(Console.ReadLine());
 
             if (!File.Exists(fileName))
@@ -34,59 +34,55 @@ namespace search_string
                 Console.WriteLine($"Файл {fileName} уже существует.");
             }
 
-            if (choice == 1)
+            switch (choice)
             {
-                // Режим добавления данных в файл
-                Console.WriteLine("Введите данные для добавления в файл:");
-                string dataToAdd = Console.ReadLine();
+                case 1:
+                    // Режим добавления данных в файл
+                    Console.WriteLine("Введите данные для добавления в файл:");
+                    string dataToAdd = Console.ReadLine();
 
-                // Запись данных в файл
-                using (StreamWriter writer = new StreamWriter(fileName, true)) // Второй аргумент "true" означает добавление данных к существующему содержимому файла
-                {
-                    writer.WriteLine(dataToAdd);
-                }
-
-                Console.WriteLine("Данные успешно добавлены в файл.");
-            }
-            if (choice == 2)
-            {
-                // Режим просмотра содержимого файла
-                if (File.Exists(fileName))
-                {
-                    // Чтение содержимого файла
-                    using (StreamReader reader = new StreamReader(fileName))
+                    // Запись данных в файл
+                    using (StreamWriter writer = new StreamWriter(fileName, true))
                     {
-                        Console.WriteLine("Введите данные для добавления в файл:");
-                        string content = reader.ReadToEnd();
-                        Console.WriteLine($"Содержимое файла {fileName}:");
-                        Console.WriteLine(content);
+                        writer.WriteLine(dataToAdd);
                     }
-                }
-            }
-            else if (choice == 3)
-            {
-                // Добавление функции поиска строки в файле
-                Console.WriteLine("Введите данные для поиска:");
-                
-                string searchString = Console.ReadLine(); ;
-                if (SearchStringInFile(fileName, searchString))
-                {
-                    Console.WriteLine($"Строка '{searchString}' найдена в файле {fileName}.");
-                }
-                else
-                {
-                    Console.WriteLine($"Строка '{searchString}' не найдена в файле {fileName}.");
-                }
 
-            }
-            else
-            {
-                Console.WriteLine("Неверный выбор режима.");
-            }
+                    Console.WriteLine("Данные успешно добавлены в файл.");
+                    break;
 
-           
+                case 2:
+                    // Режим просмотра содержимого файла
+                    if (File.Exists(fileName))
+                    {
+                        // Чтение содержимого файла
+                        using (StreamReader reader = new StreamReader(fileName))
+                        {
+                            string content = reader.ReadToEnd();
+                            Console.WriteLine($"Содержимое файла {fileName}:");
+                            Console.WriteLine(content);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    // Режим поиска строки в файле
+                    Console.WriteLine("Введите данные для поиска:");
+                    string searchString = Console.ReadLine();
+                    if (SearchStringInFile(fileName, searchString))
+                    {
+                        Console.WriteLine($"Строка '{searchString}' найдена в файле {fileName}.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Строка '{searchString}' не найдена в файле {fileName}.");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Неверный выбор режима.");
+                    break;
+            }
         }
-
         static bool SearchStringInFile(string fileName, string searchString)
         {
             if (File.Exists(fileName))
