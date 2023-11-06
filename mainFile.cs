@@ -12,7 +12,10 @@ namespace search_string
         static void Main()
         {
             string fileName = "list.txt";
-            Console.WriteLine("Выберите режим (1 - Добавить в файл, 2 - Просмотр файла):");
+            Console.WriteLine("Выберите режим (" +
+                "1 - Добавить в файл, " +
+                "2 - Просмотр файла):" +
+                "3 - Поиск строки");
             int choice = int.Parse(Console.ReadLine());
 
             if (!File.Exists(fileName))
@@ -45,7 +48,7 @@ namespace search_string
 
                 Console.WriteLine("Данные успешно добавлены в файл.");
             }
-            else if (choice == 2)
+            if (choice == 2)
             {
                 // Режим просмотра содержимого файла
                 if (File.Exists(fileName))
@@ -53,31 +56,35 @@ namespace search_string
                     // Чтение содержимого файла
                     using (StreamReader reader = new StreamReader(fileName))
                     {
+                        Console.WriteLine("Введите данные для добавления в файл:");
                         string content = reader.ReadToEnd();
                         Console.WriteLine($"Содержимое файла {fileName}:");
                         Console.WriteLine(content);
                     }
                 }
+            }
+            else if (choice == 3)
+            {
+                // Добавление функции поиска строки в файле
+                Console.WriteLine("Введите данные для поиска:");
+                
+                string searchString = Console.ReadLine(); ;
+                if (SearchStringInFile(fileName, searchString))
+                {
+                    Console.WriteLine($"Строка '{searchString}' найдена в файле {fileName}.");
+                }
                 else
                 {
-                    Console.WriteLine($"Файл {fileName} не существует.");
+                    Console.WriteLine($"Строка '{searchString}' не найдена в файле {fileName}.");
                 }
+
             }
             else
             {
                 Console.WriteLine("Неверный выбор режима.");
             }
 
-            // Добавление функции поиска строки в файле
-            string searchString = "текст, который";
-            if (SearchStringInFile(fileName, searchString))
-            {
-                Console.WriteLine($"Строка '{searchString}' найдена в файле {fileName}.");
-            }
-            else
-            {
-                Console.WriteLine($"Строка '{searchString}' не найдена в файле {fileName}.");
-            }
+           
         }
 
         static bool SearchStringInFile(string fileName, string searchString)
